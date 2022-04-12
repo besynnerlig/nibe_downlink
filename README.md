@@ -100,11 +100,13 @@ sudo chmod 755 /home/YOURUSERNAME/nibe_downlink/my_nibe_downlink.py
 
 # Usage
 
-Run the code
+Test run the code
 
 ```
 /home/YOURUSERNAME/nibe_downlink/my_nibe_downlink.py
 ```
+
+If it works you'd like to set it up so that it runs in the background and starts automatically when the server boots. There's several ways to achieve that. Using pm2 works well for me. 
 
 ### Heat Pump ID: hpid
 Get your **hpid** from Nibe Uplink web site. Open a heatpump and it's id will be in your address bar:
