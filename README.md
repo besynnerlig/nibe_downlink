@@ -115,10 +115,7 @@ https://www.nibeuplink.com/System/**99999**/Status/Overview
 ### Variable IDs
 See https://github.com/openhab/openhab1-addons/wiki/Nibe-Heat-Pump-Binding
 
-# Examples
 
-Copy *examples/config.py.dist* to *examples/config.py* and change settings inside the file
-
-### Nibe Uplink -> MQTT bridge service
+### Nibe Uplink -> MQTT bridge service (Original example by the original author)
 
 See *examples/mqtt.py*
