@@ -1,3 +1,3 @@
-from service import NibeDownlink
+from .service import NibeDownlink
 
 __all__ = ["NibeDownlink"]
