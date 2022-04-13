@@ -3,6 +3,8 @@ Get variables from Nibe Uplink and publish on MQTT. Modified to work with python
 
 # Requirements
 Your heatpump should be registered in Nibe Uplink. This module fetches data from Nibe Uplink
+Get your **hpid** from Nibe Uplink web site. Open a heatpump and it's id will be in your address bar:
+https://www.nibeuplink.com/System/**99999**/Status/Overview
 
 # Installation example (The following tested on Ubuntu 21.10)
 
@@ -22,35 +24,36 @@ Modify the configuration file to suit your needs.
 Create your main python file, ~/nibe_downlink/my_nibe_downlink.py and add code from the [example file](https://raw.githubusercontent.com/besynnerlig/nibe_downlink/master/examples/my_nibe_downlink.py).
 
 Modify the main python file file to suit your needs. Normally you can use it as it is, there's nothing to change.
+You can alter what variable id:s you'd like it to fetch. See https://github.com/openhab/openhab1-addons/wiki/Nibe-Heat-Pump-Binding
 
 Set permissions
 ```
 sudo chmod 755 /home/YOURUSERNAME/nibe_downlink/my_nibe_downlink.py
 ```
 
-# Optional installation
-    sudo npm install pm2@latest -g
-    Set up pm2 to watch that yor script never dies (Not covered here). However this is the command line I used to add the script to pm2:
-    ```pm2 start /home/YOURUSERNAME/nibe_downlink/my_nibe_downlink.py --name nibe-downlink --interpreter /home/YOURUSERNAME/nibe_downlink/env/bin/python --restart-delay=60000```
-
-# Usage
-
-Test run the code
-
+Test run. It will run until you exit the script. Enter Ctrl-C when you have tested.
 ```
-/home/YOURUSERNAME/nibe_downlink/my_nibe_downlink.py
+./my_nibe_downlink.py
 ```
 
-If it works you'd like to set it up so that it runs in the background and starts automatically when the server boots. There's several ways to achieve that. Using pm2 works well for me. 
+Deactivate the python environment
+```
+deactivate
+```
 
-### Heat Pump ID: hpid
-Get your **hpid** from Nibe Uplink web site. Open a heatpump and it's id will be in your address bar:
-https://www.nibeuplink.com/System/**99999**/Status/Overview
+# Keep it running using PM2 (a daemon process manager)
+This will help you manage and keep your application online 24/7
 
-### Variable IDs
-See https://github.com/openhab/openhab1-addons/wiki/Nibe-Heat-Pump-Binding
+```
+sudo apt-get install npm -y
+sudo npm install pm2@latest -g
+pm2 start /home/YOURUSERNAME/nibe_downlink/my_nibe_downlink.py --name nibe-downlink --interpreter /home/YOURUSERNAME/nibe_downlink/env/bin/python --restart-delay=60000
+pm2 save
+pm2 startup
+```
+Now, after the last command you shold have a command that you should copy and paste. Do that!
 
+PM2 has an [excellent documentation](https://pm2.keymetrics.io/docs/usage/quick-start/). Read it if you encounter any issues.
 
-### Nibe Uplink -> MQTT bridge service (Original example by the original author)
-
-See *examples/mqtt.py*
+# This is a forked project.
+This project was forked from a work by Jevgeni Kiski, https://github.com/yozik04/nibe_downlink Thank you Jevgeni for your excellent work!
