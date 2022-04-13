@@ -13,80 +13,13 @@ Your heatpump should be registered in Nibe Uplink. This module fetches data from
     pip install requests
     pip install paho-mqtt
 
-Create ~/nibe_downlink/config.py and add the following code. Modify to suit your needs.
+Create a configuration file, ~/nibe_downlink/config.py and add code from the [example config file](https://raw.githubusercontent.com/besynnerlig/nibe_downlink/master/examples/config.py).
 
-``` python
-import logging
+Modify the configuration file to suit your needs.
 
-rootLogger = logging.getLogger()
-rootLogger.addHandler(logging.StreamHandler())
-rootLogger.setLevel(logging.DEBUG)
+Create your main python file, ~/nibe_downlink/my_nibe_downlink.py and add code from the [example file](https://raw.githubusercontent.com/besynnerlig/nibe_downlink/master/examples/my_nibe_downlink.py).
 
-MQTT_CONF = {
-  #'auth': { # This block can be skipped if you do not have auth on your mqtt
-  #  "username": "",
-  #  "password": ""
-  #},
-  'hostname': "XXXXXX", # MQTT IP address or hostname
-  'prefix': 'nibeuplink/YOURHEATPUMPMODELL'
-}
-
-NIBE_UPLINK_CONF = {
-  'username': "YOUR-EMAIL",
-  'password': "YOUR-PASSWORD",
-  "hpid": "HEAT-PUMP-ID", # heat pump id
-  'variables': [40004, 40013, 40014, 40033, 40047, 40048, 43005, 43009, 43084, 43427] # variables you want to fetch
-}    
-```
-
-Create ~/nibe_downlink/my_nibe_downlink.py and add the following code. Modify to suit your needs.
-
-``` python
-#!/home/YOURUSERNAME/nibe_downlink/env/bin/python
-import sys
-
-import logging
-import time
-from nibe_downlink import NibeDownlink
-
-from paho.mqtt.client import Client as MQTTClient
-from config import NIBE_UPLINK_CONF, MQTT_CONF
-
-last_values = {}
-for v in NIBE_UPLINK_CONF['variables']:
-  last_values[str(v)] = ''
-
-last_values['online'] = ''
-logger = logging.getLogger()
-
-nd = NibeDownlink(**NIBE_UPLINK_CONF)
-mqtt_client = MQTTClient()
-if 'auth' in MQTT_CONF:
-  mqtt_client.username_pw_set(**MQTT_CONF['auth'])
-mqtt_client.connect(MQTT_CONF['hostname'])
-mqtt_client.loop_start()
-
-while True:
-  try:
-    online, values = nd.getValues()
-    # print values
-    if online != last_values['online']:
-      mqtt_client.publish(MQTT_CONF['prefix'] + '/online', 1 if online else 0, retain=True)
-      last_values['online'] = online
-
-    if values:
-      for key, value in values.items():
-        if value != last_values[str(key)]:
-          mqtt_client.publish(MQTT_CONF['prefix'] + '/variables/' + str(key), value, retain=True)
-          last_values[str(key)] = value
-    else:
-      logger.exception("Failed to get Nibe uplink values")
-      break
-
-  except Exception as e:
-    logger.exception("Exception while fetching Nibe uplink values")
-  time.sleep(60)
-```
+Modify the main python file file to suit your needs. Normally you can use it as it is, there's nothing to change.
 
 Set permissions
 ```
