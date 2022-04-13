@@ -4,8 +4,10 @@ Get variables from Nibe Uplink and publish on MQTT. Modified to work with python
 # Requirements
 Your heatpump should be registered in Nibe Uplink. This module fetches data from Nibe Uplink
 
-# Installation
+# Installation example (The following tested on Ubuntu 21.10)
 
+    sudo apt-get update
+    sudo apt-get install python3.9-venv git -y
     mkdir ~/nibe_downlink&&cd ~/nibe_downlink
     python3 -m venv env
     source env/bin/activate 
